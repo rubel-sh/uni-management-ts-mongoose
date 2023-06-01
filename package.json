@@ -1,0 +1,15 @@
+{
+  "name": "university-management-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Rubel Hossain",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.1.3",
+    "express": "^4.18.2",
+    "mongoose": "^7.2.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.3"
+  }
+}
