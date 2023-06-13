@@ -1,12 +1,12 @@
 import cors from 'cors'
-import express, { Application, Request, Response } from 'express'
+import express, { Application } from 'express'
 const app: Application = express()
 
 // temp
-import userService from './app/modules/users/users.service'
 
 // routes
-import usersRouter from './app/modules/users/users.route'
+import globalErrorHandler from './app/modules/users/middlewares/globalErrorHandler'
+import { UserRoutes } from './app/modules/users/user.route'
 
 app.use(cors())
 
@@ -15,16 +15,16 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 // Application Routes
-app.use('/api/v1/users', usersRouter)
+app.use('/api/v1/users', UserRoutes)
 
 // Testing
-app.get('/', async (req: Request, res: Response) => {
-  await userService.createUser({
-    id: '999',
-    role: 'student',
-    password: '123456',
-  })
-  res.send('Hello World!')
-})
+// app.get('/', (req: Request, res: Response, next: NextFunction) => {
+//   // Global middleware er kache chole jabe
+//   throw new ApiError(400, 'ore eeor')
+//   // next('ore baba Error') // Error :
+// })
+
+// Global Error Handler Middleware
+app.use(globalErrorHandler)
 
 export default app
