@@ -37,7 +37,7 @@ const logger = createLogger({
 
 const errorlogger = createLogger({
   level: 'error',
-  format: combine(label({ label: 'phu:error😒' }), timestamp(), myFormat),
+  format: combine(label({ label: 'PH: Logger😒' }), timestamp(), myFormat),
   transports: [
     new transports.Console(),
     // Logger rotator
@@ -47,7 +47,7 @@ const errorlogger = createLogger({
         'logs',
         'winston',
         'errors',
-        'phu-%DATE%-error.log'
+        '%DATE%-error.log'
       ),
       datePattern: 'YYYY-DD-MM-HH',
       zippedArchive: true,

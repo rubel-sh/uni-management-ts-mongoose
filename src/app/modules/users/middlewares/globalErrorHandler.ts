@@ -9,6 +9,7 @@ import { errorlogger } from '../../../../shared/logger'
 
 // এসব ভ্যালু এর ক্ষেত্রে টাইপ predict করা যায়না ।
 const globalErrorHandler: ErrorRequestHandler = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
   req,
   res,
