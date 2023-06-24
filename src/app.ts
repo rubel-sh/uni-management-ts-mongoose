@@ -6,6 +6,7 @@ const app: Application = express();
 
 // routes
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import { AcademicSemesterRoutes } from './app/modules/academicSemester/academicSemester.route';
 import { UserRoutes } from './app/modules/user/user.route';
 
 app.use(cors());
@@ -16,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Application Routes
 app.use('/api/v1/users', UserRoutes);
+app.use('/api/v1/academic-semesters', AcademicSemesterRoutes);
 app.get('/', async (req, res) => {
   res.json({ message: 'hello' });
 });
