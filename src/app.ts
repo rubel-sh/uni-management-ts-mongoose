@@ -1,22 +1,24 @@
-import cors from 'cors'
-import express, { Application } from 'express'
-const app: Application = express()
+import cors from 'cors';
+import express, { Application } from 'express';
+const app: Application = express();
 
 // temp
 
 // routes
-import globalErrorHandler from './app/modules/users/middlewares/globalErrorHandler'
-import { UserRoutes } from './app/modules/users/user.route'
+import globalErrorHandler from './app/middlewares/globalErrorHandler';
+import { UserRoutes } from './app/modules/user/user.route';
 
-app.use(cors())
+app.use(cors());
 
 // Parser
-app.use(express.json())
-app.use(express.urlencoded({ extended: true }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Application Routes
-app.use('/api/v1/users', UserRoutes)
-
+app.use('/api/v1/users', UserRoutes);
+app.get('/', async (req, res) => {
+  res.json({ message: 'hello' });
+});
 // Testing
 
 // eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
@@ -32,6 +34,6 @@ app.use('/api/v1/users', UserRoutes)
 // })
 
 // Global Error Handler Middleware
-app.use(globalErrorHandler)
+app.use(globalErrorHandler);
 
-export default app
+export default app;
