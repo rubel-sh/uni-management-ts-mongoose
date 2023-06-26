@@ -1,8 +1,9 @@
 import cors from 'cors';
-import express, { Application } from 'express';
+import express, { Application, NextFunction, Request, Response } from 'express';
 const app: Application = express();
 
 // routes
+import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
 
@@ -20,19 +21,17 @@ app.get('/', async (req, res) => {
   res.json({ message: 'hello' });
 });
 
-// eslint-disable-next-line no-unused-vars, @typescript-eslint/no-unused-vars
-// app.get('/', async (req: Request, res: Response, next: NextFunction) => {
-//   throw new Error('Testing Error Logger')
-//   // Reject Promise
-//   // Promise.reject(new Error('Unhandled Promise Rejection'))  // Server Dhum kore crash korbe
-//   // uncaught exception : Programmer mistakes
-//   // console.log(x)
-//   // Global middleware er kache chole jabe
-//   // next('ore baba Error') // Error :
-//   // throw new ApiError(400, 'ore eeor')
-// })
-
 // Global Error Handler Middleware
 app.use(globalErrorHandler);
+
+// handle not found routes
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.status(httpStatus.NOT_FOUND).json({
+    success: false,
+    message: 'Route not found',
+    errorMessages: [{ path: req.originalUrl, message: 'API route not found' }],
+  });
+  next();
+});
 
 export default app;

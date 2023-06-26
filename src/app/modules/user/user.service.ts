@@ -1,3 +1,4 @@
+import httpStatus from 'http-status';
 import config from '../../../config/index';
 import ApiError from '../../../errors/ApiError';
 import { IUser } from './user.interface';
@@ -19,8 +20,11 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
 
   //If CreatedUser Failed
   //   throw error
-  if (!createUser) {
-    throw new ApiError(400, 'Error failed to create user!');
+  if (!createdUser) {
+    throw new ApiError(
+      httpStatus.GATEWAY_TIMEOUT,
+      'Error failed to create user!'
+    );
   }
 
   return createdUser;

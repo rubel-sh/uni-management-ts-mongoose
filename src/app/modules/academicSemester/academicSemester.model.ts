@@ -53,6 +53,7 @@ academicSemesterSchema.pre('save', async function (next) {
   if (isExist) {
     throw new ApiError(httpStatus.CONFLICT, 'Semester already exists');
   }
+
   next();
 });
 
