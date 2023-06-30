@@ -1,9 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable no-console */
 import { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 import config from '../../config';
 import ApiError from '../../errors/ApiError';
+import handleCastError from '../../errors/handleCastError';
 import handleValidationError from '../../errors/handleValidationError';
 import handleZodError from '../../errors/handleZodError';
 import { IGenericErrorMessage } from '../../interfaces/error';
@@ -11,7 +15,6 @@ import { errorlogger } from '../../shared/logger';
 
 // এসব ভ্যালু এর ক্ষেত্রে টাইপ predict করা যায়না ।
 const globalErrorHandler: ErrorRequestHandler = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any,
   req,
   res,
@@ -39,6 +42,13 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode = simplifierZodError.statusCode;
     message = simplifierZodError.message;
     errorMessages = simplifierZodError.errorMessages;
+  }
+  // Cast error : mongoose id search e id lenth thik na thakle
+  else if (error?.name === 'CastError') {
+    const simplifiedError = handleCastError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
   }
 
   // api এরর
@@ -76,8 +86,6 @@ const globalErrorHandler: ErrorRequestHandler = (
     errorMessages,
     stack: config.env !== 'production' ? error?.stack : undefined, // depend korbe .env NODE_ENV উপর
   });
-
-  next();
 };
 
 export default globalErrorHandler;
