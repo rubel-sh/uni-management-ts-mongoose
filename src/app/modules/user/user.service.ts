@@ -3,11 +3,11 @@ import config from '../../../config/index';
 import ApiError from '../../../errors/ApiError';
 import { IUser } from './user.interface';
 import { User } from './user.model';
-import { generateUserId } from './user.utils';
+import { generateStudentId } from './user.utils';
 
 const createUser = async (user: IUser): Promise<IUser | null> => {
   // Auto Generated Incremental id
-  const id = await generateUserId();
+  const id = await generateStudentId();
 
   user.id = id;
 
