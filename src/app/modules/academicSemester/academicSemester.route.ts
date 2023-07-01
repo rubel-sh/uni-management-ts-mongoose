@@ -20,6 +20,8 @@ router.patch(
   AcademicSemesterController.updateSemester
 );
 
+router.delete('/:id', AcademicSemesterController.deleteSemester);
+
 router.get('/:id', AcademicSemesterController.getSingleSemester);
 
 router.get('/', AcademicSemesterController.getAllSemesters);
