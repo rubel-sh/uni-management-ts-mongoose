@@ -42,12 +42,12 @@ export type LocalGuardian = {
 export type IStudent = {
   id: string;
   name: UserName; //embedded object
-  gender: IStudentGenders; //embedded object
+  gender: IStudentGenders;
   dateOfBirth: string;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloodGroup?: IStudentBloodGroups; //embedded object
+  bloodGroup?: IStudentBloodGroups;
   presentAddress: string;
   permanentAddress: string;
   guardian: Guardian; // embedded object

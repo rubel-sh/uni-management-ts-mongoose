@@ -13,7 +13,7 @@ const getAllStudents = catchAsync(async (req: Request, res: Response) => {
   const paginationOptions = pick(req.query, paginationFields);
 
   // Service Layer
-  const result = await StudentService.getAllSemesters(
+  const result = await StudentService.getAllStudents(
     filters,
     paginationOptions
   );
@@ -30,7 +30,7 @@ const getAllStudents = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
-  const result = await StudentService.getSingleSemester(id);
+  const result = await StudentService.getSingleStudent(id);
   sendResponse<IStudent>(res, {
     success: true,
     statusCode: httpStatus.OK,
@@ -43,7 +43,7 @@ const updateStudent = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
   const updatedData = req.body;
 
-  const result = await StudentService.updateSemester(id, updatedData);
+  const result = await StudentService.updateStudent(id, updatedData);
 
   sendResponse<IStudent>(res, {
     success: true,
@@ -56,7 +56,7 @@ const updateStudent = catchAsync(async (req: Request, res: Response) => {
 const deleteStudent = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
-  const result = await StudentService.deleteSemester(id);
+  const result = await StudentService.deleteStudent(id);
 
   sendResponse<IStudent>(res, {
     success: true,
@@ -66,7 +66,7 @@ const deleteStudent = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-export const AcademicSemesterController = {
+export const StudentController = {
   getAllStudents,
   getSingleStudent,
   updateStudent,
