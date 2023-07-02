@@ -9,12 +9,11 @@ const ApiError_1 = __importDefault(require("../../errors/ApiError"));
 const handleCastError_1 = __importDefault(require("../../errors/handleCastError"));
 const handleValidationError_1 = __importDefault(require("../../errors/handleValidationError"));
 const handleZodError_1 = __importDefault(require("../../errors/handleZodError"));
-const logger_1 = require("../../shared/logger");
 // এসব ভ্যালু এর ক্ষেত্রে টাইপ predict করা যায়না ।
 const globalErrorHandler = (error, req, res, next) => {
     config_1.default.env == 'development'
         ? console.log('🚀 globalErrorHandler', error)
-        : logger_1.errorlogger.error('🚀 globalErrorHandler errorLogger', error);
+        : console.log('🚀 globalErrorHandler errorLogger', error);
     let statusCode = 500;
     let message = 'Something went wrong !';
     let errorMessages = [];
