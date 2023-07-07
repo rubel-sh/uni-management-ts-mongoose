@@ -5,7 +5,7 @@ import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import { academicFacultyFilterableFields } from './academicFaculty.constants';
-import { IAcademicFaculty } from './academicFaculty.interface';
+import { IAcademicFaculty } from './academicFaculty.interfaces';
 import { AcademicFacultyService } from './academicFaculty.service';
 
 const createFaculty = catchAsync(async (req: Request, res: Response) => {
@@ -35,7 +35,7 @@ const getAllFaculties = catchAsync(async (req: Request, res: Response) => {
     success: true,
     message: 'Academic Faculties retrieved successfully',
     meta: result.meta,
-    data: result.data.flat(),
+    data: result.data,
   });
 });
 

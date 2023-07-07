@@ -1,35 +1,39 @@
 import cors from 'cors';
 import express, { Application, NextFunction, Request, Response } from 'express';
-const app: Application = express();
-
-// routes
 import httpStatus from 'http-status';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
 import routes from './app/routes';
+const app: Application = express();
 
 app.use(cors());
 
-// Parser
+//parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Application Routes
+// app.use('/api/v1/users/', UserRoutes);
+// app.use('/api/v1/academic-semesters', AcademicSemesterRoutes);
 app.use('/api/v1', routes);
 
-// Testing
-app.get('/', async (req, res) => {
-  res.json({ message: 'hello' });
-});
+//Testing
+// app.get('/', async (req: Request, res: Response, next: NextFunction) => {
+//   throw new Error('Testing Error logger')
+// })
 
-// Global Error Handler Middleware
+//global error handler
 app.use(globalErrorHandler);
 
-// handle not found routes
+//handle not found
 app.use((req: Request, res: Response, next: NextFunction) => {
   res.status(httpStatus.NOT_FOUND).json({
     success: false,
-    message: 'Route not found',
-    errorMessages: [{ path: req.originalUrl, message: 'API route not found' }],
+    message: 'Not Found',
+    errorMessages: [
+      {
+        path: req.originalUrl,
+        message: 'API Not Found',
+      },
+    ],
   });
   next();
 });

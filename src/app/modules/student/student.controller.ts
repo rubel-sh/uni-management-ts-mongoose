@@ -4,25 +4,23 @@ import { paginationFields } from '../../../constants/pagination';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { studentFilterableFields } from './student.constants';
-import { IStudent } from './student.interfaces';
+import { studentFilterableFields } from './student.constant';
+import { IStudent } from './student.interface';
 import { StudentService } from './student.service';
 
 const getAllStudents = catchAsync(async (req: Request, res: Response) => {
   const filters = pick(req.query, studentFilterableFields);
   const paginationOptions = pick(req.query, paginationFields);
 
-  // Service Layer
   const result = await StudentService.getAllStudents(
     filters,
     paginationOptions
   );
 
-  // response
   sendResponse<IStudent[]>(res, {
-    success: true,
     statusCode: httpStatus.OK,
-    message: 'Academic retrieved successfully',
+    success: true,
+    message: 'Students retrieved successfully !',
     meta: result.meta,
     data: result.data,
   });
@@ -30,11 +28,13 @@ const getAllStudents = catchAsync(async (req: Request, res: Response) => {
 
 const getSingleStudent = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
+
   const result = await StudentService.getSingleStudent(id);
+
   sendResponse<IStudent>(res, {
-    success: true,
     statusCode: httpStatus.OK,
-    message: 'Semester retrived successfully',
+    success: true,
+    message: 'Student retrieved successfully !',
     data: result,
   });
 });
@@ -46,22 +46,21 @@ const updateStudent = catchAsync(async (req: Request, res: Response) => {
   const result = await StudentService.updateStudent(id, updatedData);
 
   sendResponse<IStudent>(res, {
-    success: true,
     statusCode: httpStatus.OK,
-    message: 'Semester updated successfully',
+    success: true,
+    message: 'Student updated successfully !',
     data: result,
   });
 });
-
 const deleteStudent = catchAsync(async (req: Request, res: Response) => {
   const id = req.params.id;
 
   const result = await StudentService.deleteStudent(id);
 
   sendResponse<IStudent>(res, {
-    success: true,
     statusCode: httpStatus.OK,
-    message: 'Semester deleted successfully',
+    success: true,
+    message: 'Student deleted successfully !',
     data: result,
   });
 });

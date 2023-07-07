@@ -1,10 +1,10 @@
 import express from 'express';
 import validateRequest from '../../middlewares/validateRequest';
-import { AcademicSemesterController } from './academicSemester.controller';
-import { AcademicSemesterValidation } from './academicSemester.validation';
+// import { UserController } from './user.controller';
 
+import { AcademicSemesterController } from './academicSemester.controller';
+import { AcademicSemesterValidation } from './acdemicSemester.validation';
 const router = express.Router();
-// AcademicSemesterValidation.createAcademicSemesterZodSchema
 
 router.post(
   '/create-semester',
@@ -12,7 +12,7 @@ router.post(
   AcademicSemesterController.createSemester
 );
 
-// ensure 2 : service level : Update --> Mapping title : code
+router.get('/:id', AcademicSemesterController.getSingleSemester);
 
 router.patch(
   '/:id',
@@ -21,8 +21,6 @@ router.patch(
 );
 
 router.delete('/:id', AcademicSemesterController.deleteSemester);
-
-router.get('/:id', AcademicSemesterController.getSingleSemester);
 
 router.get('/', AcademicSemesterController.getAllSemesters);
 

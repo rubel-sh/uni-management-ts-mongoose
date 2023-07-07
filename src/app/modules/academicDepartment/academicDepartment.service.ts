@@ -12,7 +12,7 @@ import { AcademicDepartment } from './academicDepartment.model';
 const getAllDepartments = async (
   filters: IAcademicDepartmentFilters,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<IAcademicDepartment>> => {
+): Promise<IGenericResponse<IAcademicDepartment[]>> => {
   const { limit, page, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
 

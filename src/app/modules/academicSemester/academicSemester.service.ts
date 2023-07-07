@@ -7,38 +7,40 @@ import { IPaginationOptions } from '../../../interfaces/pagination';
 import {
   academicSemesterSearchableFields,
   academicSemesterTitleCodeMapper,
-} from './academicSemester.constants';
+} from './academicSemester.constant';
 import {
   IAcademicSemester,
-  IAcademicSemesterFilter,
+  IAcademicSemesterFilters,
 } from './academicSemester.interface';
 import { AcademicSemester } from './academicSemester.model';
 
 const createSemester = async (
   payload: IAcademicSemester
 ): Promise<IAcademicSemester> => {
-  // Business issues: check title with code
   if (academicSemesterTitleCodeMapper[payload.title] !== payload.code) {
-    //  Summer : 02 !=== payload.code
     throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Semester Code');
   }
-
   const result = await AcademicSemester.create(payload);
   return result;
 };
 
-const getAllSemesters = async (
-  filters: IAcademicSemesterFilter,
+const getAllsemesters = async (
+  filters: IAcademicSemesterFilters,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<IAcademicSemester>> => {
-  // push search conditions to andConditions array
+): Promise<IGenericResponse<IAcademicSemester[]>> => {
   const { searchTerm, ...filtersData } = filters;
+  const { page, limit, skip, sortBy, sortOrder } =
+    paginationHelpers.calculatePagination(paginationOptions);
 
   const andConditions = [];
+
   if (searchTerm) {
     andConditions.push({
       $or: academicSemesterSearchableFields.map(field => ({
-        [field]: { $regex: searchTerm, $options: 'i' },
+        [field]: {
+          $regex: searchTerm,
+          $options: 'i',
+        },
       })),
     });
   }
@@ -51,19 +53,40 @@ const getAllSemesters = async (
     });
   }
 
-  // push filters to andConditions array
-  const { page, limit, skip, sortBy, sortOrder } =
-    paginationHelpers.calculatePagination(paginationOptions);
+  // const andConditions = [
+  //   {
+  //     $or: [
+  //       {
+  //         title: {
+  //           $regex: searchTerm,
+  //           $options: 'i',
+  //         },
+  //       },
+  //       {
+  //         code: {
+  //           $regex: searchTerm,
+  //           $options: 'i',
+  //         },
+  //       },
+  //       {
+  //         year: {
+  //           $regex: searchTerm,
+  //           $options: 'i',
+  //         },
+  //       },
+  //     ],
+  //   },
+  // ];
 
   const sortConditions: { [key: string]: SortOrder } = {};
 
   if (sortBy && sortOrder) {
     sortConditions[sortBy] = sortOrder;
   }
-
-  const whereCondition =
+  const whereConditions =
     andConditions.length > 0 ? { $and: andConditions } : {};
-  const result = await AcademicSemester.find(whereCondition)
+
+  const result = await AcademicSemester.find(whereConditions)
     .sort(sortConditions)
     .skip(skip)
     .limit(limit);
@@ -82,7 +105,7 @@ const getAllSemesters = async (
 
 const getSingleSemester = async (
   id: string
-): Promise<IAcademicSemester | null | undefined> => {
+): Promise<IAcademicSemester | null> => {
   const result = await AcademicSemester.findById(id);
   return result;
 };
@@ -90,15 +113,15 @@ const getSingleSemester = async (
 const updateSemester = async (
   id: string,
   payload: Partial<IAcademicSemester>
-): Promise<IAcademicSemester | null | undefined> => {
+): Promise<IAcademicSemester | null> => {
   if (
     payload.title &&
     payload.code &&
     academicSemesterTitleCodeMapper[payload.title] !== payload.code
   ) {
-    //  Summer : 02 !=== payload.code
     throw new ApiError(httpStatus.BAD_REQUEST, 'Invalid Semester Code');
   }
+
   const result = await AcademicSemester.findOneAndUpdate({ _id: id }, payload, {
     new: true,
   });
@@ -107,15 +130,15 @@ const updateSemester = async (
 
 const deleteSemester = async (
   id: string
-): Promise<IAcademicSemester | null | undefined> => {
+): Promise<IAcademicSemester | null> => {
   const result = await AcademicSemester.findByIdAndDelete(id);
   return result;
 };
 
 export const AcademicSemesterService = {
   createSemester,
+  getAllsemesters,
   getSingleSemester,
-  getAllSemesters,
   updateSemester,
   deleteSemester,
 };

@@ -1,5 +1,3 @@
-// This will contain Classes
-
 class ApiError extends Error {
   statusCode: number;
 

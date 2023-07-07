@@ -1,20 +1,7 @@
 import { Model, Types } from 'mongoose';
-
 import { IAcademicDepartment } from '../academicDepartment/academicDepartment.interfaces';
-import { IAcademicFaculty } from '../academicFaculty/academicFaculty.interface';
+import { IAcademicFaculty } from '../academicFaculty/academicFaculty.interfaces';
 import { IAcademicSemester } from '../academicSemester/academicSemester.interface';
-
-export type IStudentGenders = 'male' | 'female';
-
-export type IStudentBloodGroups =
-  | 'A+'
-  | 'A-'
-  | 'B+'
-  | 'B-'
-  | 'AB+'
-  | 'AB-'
-  | 'O+'
-  | 'O-';
 
 export type UserName = {
   firstName: string;
@@ -42,12 +29,12 @@ export type LocalGuardian = {
 export type IStudent = {
   id: string;
   name: UserName; //embedded object
-  gender: IStudentGenders;
+  gender: 'male' | 'female';
   dateOfBirth: string;
   email: string;
   contactNo: string;
   emergencyContactNo: string;
-  bloodGroup?: IStudentBloodGroups;
+  bloodGroup?: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   presentAddress: string;
   permanentAddress: string;
   guardian: Guardian; // embedded object
@@ -55,7 +42,7 @@ export type IStudent = {
   academicFaculty: Types.ObjectId | IAcademicFaculty; // reference _id
   academicDepartment: Types.ObjectId | IAcademicDepartment; // // reference _id
   academicSemester: Types.ObjectId | IAcademicSemester; // reference _id
-  profileImage?: string; // later on
+  profileImage?: string;
 };
 
 export type StudentModel = Model<IStudent, Record<string, unknown>>;

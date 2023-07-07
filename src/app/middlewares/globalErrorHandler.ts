@@ -1,60 +1,50 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-unused-expressions */
 /* eslint-disable no-console */
-import { ErrorRequestHandler } from 'express';
-import { ZodError } from 'zod';
+/* eslint-disable no-unused-expressions */
+import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
 import config from '../../config';
 import ApiError from '../../errors/ApiError';
-import handleCastError from '../../errors/handleCastError';
 import handleValidationError from '../../errors/handleValidationError';
+
+import { ZodError } from 'zod';
+import handleCastError from '../../errors/handleCastError';
 import handleZodError from '../../errors/handleZodError';
 import { IGenericErrorMessage } from '../../interfaces/error';
+import { errorlogger } from '../../shared/logger';
 
-// এসব ভ্যালু এর ক্ষেত্রে টাইপ predict করা যায়না ।
 const globalErrorHandler: ErrorRequestHandler = (
-  error: any,
-  req,
-  res,
-  next
+  error,
+  req: Request,
+  res: Response,
+  next: NextFunction
 ) => {
-  config.env == 'development'
-    ? console.log('🚀 globalErrorHandler', error)
-    : console.log('🚀 globalErrorHandler errorLogger', error);
+  config.env === 'development'
+    ? console.log(`🐱‍🏍 globalErrorHandler ~~`, { error })
+    : errorlogger.error(`🐱‍🏍 globalErrorHandler ~~`, error);
 
   let statusCode = 500;
   let message = 'Something went wrong !';
   let errorMessages: IGenericErrorMessage[] = [];
 
-  // If error coming from mongoose validation error
   if (error?.name === 'ValidationError') {
     const simplifiedError = handleValidationError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
-  }
-
-  // Zod Error
-  else if (error instanceof ZodError) {
-    const simplifierZodError = handleZodError(error);
-    statusCode = simplifierZodError.statusCode;
-    message = simplifierZodError.message;
-    errorMessages = simplifierZodError.errorMessages;
-  }
-  // Cast error : mongoose id search e id lenth thik na thakle
-  else if (error?.name === 'CastError') {
+  } else if (error instanceof ZodError) {
+    const simplifiedError = handleZodError(error);
+    statusCode = simplifiedError.statusCode;
+    message = simplifiedError.message;
+    errorMessages = simplifiedError.errorMessages;
+  } else if (error?.name === 'CastError') {
     const simplifiedError = handleCastError(error);
     statusCode = simplifiedError.statusCode;
     message = simplifiedError.message;
     errorMessages = simplifiedError.errorMessages;
-  }
-
-  // api এরর
-  else if (error instanceof ApiError) {
+  } else if (error instanceof ApiError) {
     statusCode = error?.statusCode;
-    message = error?.message;
-    errorMessages = error.message
+    message = error.message;
+    errorMessages = error?.message
       ? [
           {
             path: '',
@@ -62,12 +52,8 @@ const globalErrorHandler: ErrorRequestHandler = (
           },
         ]
       : [];
-  }
-
-  // If it's normal error like : api error
-  else if (error instanceof Error) {
+  } else if (error instanceof Error) {
     message = error?.message;
-    //  IF message is an empty string and we want to validate our Interface, also to maintain out consistency
     errorMessages = error?.message
       ? [
           {
@@ -78,13 +64,19 @@ const globalErrorHandler: ErrorRequestHandler = (
       : [];
   }
 
-  //   Generic Error Pattern for frontend
   res.status(statusCode).json({
     success: false,
     message,
     errorMessages,
-    stack: config.env !== 'production' ? error?.stack : undefined, // depend korbe .env NODE_ENV উপর
+    stack: config.env !== 'production' ? error?.stack : undefined,
   });
 };
 
 export default globalErrorHandler;
+
+//path:
+//message:
+
+// 2025 Fall
+
+// 2025 and

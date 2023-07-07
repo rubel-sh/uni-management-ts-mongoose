@@ -6,7 +6,7 @@ import { academicFacultySearchableFields } from './academicFaculty.constants';
 import {
   IAcademicFaculty,
   IAcademicFacultyFilters,
-} from './academicFaculty.interface';
+} from './academicFaculty.interfaces';
 import { AcademicFaculty } from './academicFaculty.model';
 
 const createFaculty = async (
@@ -19,7 +19,7 @@ const createFaculty = async (
 const getAllFaculties = async (
   filters: IAcademicFacultyFilters,
   paginationOptions: IPaginationOptions
-): Promise<IGenericResponse<IAcademicFaculty>> => {
+): Promise<IGenericResponse<IAcademicFaculty[]>> => {
   const { searchTerm, ...filtersData } = filters;
   const { page, limit, skip, sortBy, sortOrder } =
     paginationHelpers.calculatePagination(paginationOptions);
